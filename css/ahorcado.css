@@ -1,9 +1,3 @@
-.letra:not(:disabled):active,
-.letraP {
-    background-color: #000;
-    color: #fff;
-}
-
 body {
     font-family: Arial, sans-serif;
     text-align: center;
@@ -84,4 +78,10 @@ canvas {
 .letra.incorrecta {
     background-color: #D32F2F;
     color: white;
+}
+
+.letra:not(:disabled):active,
+.letraP {
+    background-color: #000;
+    color: #fff;
 }
