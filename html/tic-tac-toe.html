@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/tic-tac-toe.css">
+    <script src="../js/tic-tac-toe.js" defer></script>
+</head>
+
+<body class="bg-gray-100 font-sans antialiased">
+    <div id="container">
+        <div class="form" id="form">
+            <div class="instructions">
+                <h1 class="text-3xl font-bold mb-4 text-white">Tic Tac Toe</h1>
+                <p class="mb-2 text-white">Ingresa los nombres de los jugadores</p>
+                <p class="mb-2 text-white">El jugador 1 es O y el jugador 2 es X</p>
+                <div>
+                    <h2 class="text-xl font-semibold mb-2 text-white">Reglas del juego:</h2>
+                    <ul class="list-disc pl-5 mb-4 text-white">
+                        <li>
+                            <strong class="font-semibold">Objetivo</strong>: El objetivo es alinear tres de tus símbolos
+                            (X o O)
+                            en una línea horizontal, vertical o diagonal.
+                        </li>
+                        <li>
+                            <strong class="font-semibold">Turnos</strong>: Los jugadores se turnan para colocar sus
+                            símbolos en
+                            las casillas vacías.
+                        </li>
+                        <li>
+                            <strong class="font-semibold">Colocación</strong>: Cada jugador coloca su símbolo en una
+                            casilla
+                            vacía por turno.
+                        </li>
+                        <li><strong class="font-semibold">Ganar</strong>: El jugador que alinee tres símbolos iguales en
+                            una línea gana.</li>
+                        <li>
+                            <strong class="font-semibold">Empate</strong>: Si todas las casillas están llenas y nadie ha
+                            ganado,
+                            el juego termina en empate.
+                        </li>
+                        <li><strong class="font-semibold">Reglas adicionales</strong>: Cada jugador solo tiene 30
+                            segundos para colocar su
+                            símbolo.</li>
+                    </ul>
+                </div>
+            </div>
+            <input type="text" id="player1" placeholder="Jugador 1" class="border rounded p-2 mb-4 w-full">
+            <input type="text" id="player2" placeholder="Jugador 2" class="border rounded p-2 mb-4 w-full">
+            <button onclick="askToStartGame()"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full">
+                Comenzar
+            </button>
+        </div>
+        <div class="game" hidden id="game">
+            <div class="flex justify-between items-center mb-4">
+                <div class="turno">
+                    Turno de <p id="player"></p>
+                </div>
+                <div class="timer">
+                    <div class="time" id="time">30</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell" onclick="cellClicked(this)" id="0"></div>
+                <div class="cell" onclick="cellClicked(this)" id="1"></div>
+                <div class="cell" onclick="cellClicked(this)" id="2"></div>
+            </div>
+            <div class="row">
+                <div class="cell" onclick="cellClicked(this)" id="3"></div>
+                <div class="cell" onclick="cellClicked(this)" id="4"></div>
+                <div class="cell" onclick="cellClicked(this)" id="5"></div>
+            </div>
+            <div class="row">
+                <div class="cell" onclick="cellClicked(this)" id="6"></div>
+                <div class="cell" onclick="cellClicked(this)" id="7"></div>
+                <div class="cell" onclick="cellClicked(this)" id="8"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
