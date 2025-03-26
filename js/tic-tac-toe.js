@@ -97,14 +97,15 @@ function setGameOver() {
 
 function startTimer() {
     timeLeft = 30;
+    document.getElementById('time').style.color = '#6ee7b7';
     document.getElementById('time').innerHTML = timeLeft;
     timer = setInterval(function () {
         timeLeft--;
         document.getElementById('time').innerHTML = timeLeft;
-        if (timeLeft <= 20) {
+        if (timeLeft == 20) {
             document.getElementById('time').style.color = '#fef08a';
         }
-        if (timeLeft <= 10) {
+        if (timeLeft == 10) {
             document.getElementById('time').style.color = '#fca5a5';
         }
         if (timeLeft <= 0) {
