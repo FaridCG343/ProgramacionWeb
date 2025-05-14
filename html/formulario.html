@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luna's Cafe - Menú</title>
+    <link rel="stylesheet" href="css/formulario.css">
+</head>
+
+<body>
+    <div class="navbar">Luna's Cafe</div>
+    <div class="container">
+        <form action="">
+
+
+            <h2>Menú de Pedido</h2>
+
+            <label for="cliente">Nombre del Cliente:</label>
+            <input type="text" id="cliente" name="cliente" required><br><br>
+
+            <h3>Bebidas Calientes</h3>
+            <select name="bebidas_calientes">
+                <option>Café Americano</option>
+                <option>Capuchino</option>
+                <option>Latte</option>
+                <option>Espresso</option>
+                <option>Té Chai</option>
+            </select>
+
+            <h3>Bebidas Frías</h3>
+            <select name="bebidas_frias">
+                <option>Café Helado</option>
+                <option>Té Helado</option>
+                <option>Frapuccino</option>
+                <option>Limonada</option>
+                <option>Jugo de Naranja</option>
+            </select>
+
+            <h3>Alimentos</h3>
+            <select name="alimentos">
+                <option>Sandwich</option>
+                <option>Pan dulce</option>
+                <option>Ensalada</option>
+                <option>Hotcake</option>
+                <option>Mollete</option>
+            </select>
+
+            <h3>Comentarios</h3>
+            <textarea name="comentarios" rows="4" placeholder="Especifique detalles adicionales..."></textarea>
+
+            <div class="btn-container">
+                <button class="accept" type="submit">Aceptar</button>
+                <button class="cancel">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
