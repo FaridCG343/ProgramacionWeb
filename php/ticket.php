@@ -1,37 +1,66 @@
 <?php
-function getLastTicketNumber(): int
+require "connection.php";
+class TicketData
 {
-    $file = fopen("../data/tickets.csv", "r");
-    $lastTicketNumber = 0;
-    $headers = fgetcsv($file);
-    while (($row = fgetcsv($file)) !== false) {
-        $row = array_combine($headers, $row);
-        if ($row['id'] > $lastTicketNumber) {
-            $lastTicketNumber = $row['id'];
-        }
-    }
-    fclose($file);
-    return $lastTicketNumber;
+    public function __construct(
+        public int $id,
+        public string $cliente,
+        public string $bebida_caliente,
+        public string $bebida_fria,
+        public string $alimento,
+        public string $comentarios,
+        public string $fecha
+    ) {}
 }
 
-function getTicketData(int $ticketNumber): array
+class Ticket
 {
-    $file = fopen("../data/tickets.csv", "r");
-    $ticketData = [];
-    $headers = fgetcsv($file);
-    while (($row = fgetcsv($file)) !== false) {
-        $row = array_combine($headers, $row);
-        if ($row['id'] == $ticketNumber) {
-            $ticketData = $row;
-            break;
-        }
+    public static function getLastTicketNumber(): int
+    {
+        $conn = new DatabaseConnection();
+        $query = "SELECT MAX(id) AS max_id FROM tickets";
+        $result = $conn->executeQuery($query);
+        return $result[0]['max_id'] ?? 0;
     }
-    fclose($file);
-    return $ticketData;
+
+    public static function getTicketData(int $ticketNumber): TicketData
+    {
+        $conn = new DatabaseConnection();
+        $query = "SELECT * FROM tickets WHERE id = $1";
+        $result = $conn->executeQuery($query, [$ticketNumber]);
+        if (empty($result)) {
+            throw new Exception("Ticket not found");
+        }
+        $data = $result[0];
+        return new TicketData(
+            $data['id'],
+            $data['cliente'],
+            $data['bebida_caliente'],
+            $data['bebida_fria'],
+            $data['alimento'],
+            $data['comentarios'],
+            $data['fecha']
+        );
+    }
+
+    public static function createTicket(TicketData $ticket): bool
+    {
+        $conn = new DatabaseConnection();
+        $query = "INSERT INTO tickets (id, cliente, bebida_caliente, bebida_fria, alimento, comentarios, fecha) VALUES ($1, $2, $3, $4, $5, $6, $7)";
+        return $conn->executeInsert($query, [
+            $ticket->id,
+            $ticket->cliente,
+            $ticket->bebida_caliente,
+            $ticket->bebida_fria,
+            $ticket->alimento,
+            $ticket->comentarios,
+            $ticket->fecha
+        ]);
+    }
 }
 
 if (!empty($_POST['cliente']) && (!empty($_POST['bebidas_calientes']) || !empty($_POST['bebidas_frias']) || !empty($_POST['alimentos']))) {
-    $lastTicketNumber = getLastTicketNumber();
+    $lastTicketNumber = Ticket::getLastTicketNumber();
     $ticket = [
         'id' => $lastTicketNumber + 1,
         'cliente' => $_POST['cliente'],
@@ -41,12 +70,19 @@ if (!empty($_POST['cliente']) && (!empty($_POST['bebidas_calientes']) || !empty(
         'comentarios' => $_POST['comentarios'] ?? '',
         'fecha' => date('Y-m-d H:i:s'),
     ];
-    $ticketString = implode(',', $ticket) . "\n";
-    file_put_contents("../data/tickets.csv", $ticketString, FILE_APPEND);
+    Ticket::createTicket(new TicketData(
+        $ticket['id'],
+        $ticket['cliente'],
+        $ticket['bebida_caliente'],
+        $ticket['bebida_fria'],
+        $ticket['alimento'],
+        $ticket['comentarios'],
+        $ticket['fecha']
+    ));
     header("Location: " . $_SERVER['PHP_SELF'] . "?ticket=" . $ticket['id']); // Esta parte sirve para no mandar otra vez el formulario al recargar la página
     exit();
 } elseif (!empty($_GET['ticket'])) {
-    $ticket = getTicketData($_GET['ticket']);
+    $ticket = Ticket::getTicketData($_GET['ticket']);
 }
 ?>
 
@@ -127,25 +163,25 @@ if (!empty($_POST['cliente']) && (!empty($_POST['bebidas_calientes']) || !empty(
     <div class="ticket">
         <h2>Ticket de Venta</h2>
         <div class="info">
-            <strong>ID del Ticket:</strong> <?php echo $ticket['id']; ?><br>
-            <strong>Cliente:</strong> <?php echo htmlspecialchars($ticket['cliente']); ?><br>
-            <strong>Fecha:</strong> <?php echo $ticket['fecha']; ?>
+            <strong>ID del Ticket:</strong> <?php echo $ticket->id; ?><br>
+            <strong>Cliente:</strong> <?php echo htmlspecialchars($ticket->cliente); ?><br>
+            <strong>Fecha:</strong> <?php echo $ticket->fecha; ?>
         </div>
         <div class="details">
-            <?php if (!empty($ticket['bebida_caliente'])): ?>
-                <p><strong>Bebida Caliente:</strong> <?php echo htmlspecialchars($ticket['bebida_caliente']); ?></p>
+            <?php if (!empty($ticket->bebida_caliente)): ?>
+                <p><strong>Bebida Caliente:</strong> <?php echo htmlspecialchars($ticket->bebida_caliente); ?></p>
             <?php endif; ?>
-            <?php if (!empty($ticket['bebida_fria'])): ?>
-                <p><strong>Bebida Fría:</strong> <?php echo htmlspecialchars($ticket['bebida_fria']); ?></p>
+            <?php if (!empty($ticket->bebida_fria)): ?>
+                <p><strong>Bebida Fría:</strong> <?php echo htmlspecialchars($ticket->bebida_fria); ?></p>
             <?php endif; ?>
-            <?php if (!empty($ticket['alimento'])): ?>
-                <p><strong>Alimento:</strong> <?php echo htmlspecialchars($ticket['alimento']); ?></p>
+            <?php if (!empty($ticket->alimento)): ?>
+                <p><strong>Alimento:</strong> <?php echo htmlspecialchars($ticket->alimento); ?></p>
             <?php endif; ?>
         </div>
-        <?php if (!empty($ticket['comentarios'])): ?>
+        <?php if (!empty($ticket->comentarios)): ?>
             <div class="comments">
                 <strong>Comentarios:</strong>
-                <p><?php echo nl2br(htmlspecialchars($ticket['comentarios'])); ?></p>
+                <p><?php echo nl2br(htmlspecialchars($ticket->comentarios)); ?></p>
             </div>
         <?php endif; ?>
         <p class="thanks">¡Gracias por tu compra!</p>
