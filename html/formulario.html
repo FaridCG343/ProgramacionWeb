@@ -5,13 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luna's Cafe - Menú</title>
-    <link rel="stylesheet" href="css/formulario.css">
+    <link rel="stylesheet" href="../css/formulario.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
     <div class="navbar">Luna's Cafe</div>
     <div class="container">
-        <form action="">
+        <form action="/php/ticket.php" method="POST" id="formulario">
 
 
             <h2>Menú de Pedido</h2>
@@ -20,30 +21,33 @@
             <input type="text" id="cliente" name="cliente" required><br><br>
 
             <h3>Bebidas Calientes</h3>
-            <select name="bebidas_calientes">
-                <option>Café Americano</option>
-                <option>Capuchino</option>
-                <option>Latte</option>
-                <option>Espresso</option>
-                <option>Té Chai</option>
+            <select name="bebidas_calientes" id="bebidas_calientes">
+                <option value="">Selecciona tu bebida caliente...</option>
+                <option value="Café Americano">Café Americano</option>
+                <option value="Capuchino">Capuchino</option>
+                <option value="Latte">Latte</option>
+                <option value="Espresso">Espresso</option>
+                <option value="Té Chai">Té Chai</option>
             </select>
 
             <h3>Bebidas Frías</h3>
-            <select name="bebidas_frias">
-                <option>Café Helado</option>
-                <option>Té Helado</option>
-                <option>Frapuccino</option>
-                <option>Limonada</option>
-                <option>Jugo de Naranja</option>
+            <select name="bebidas_frias" id="bebidas_frias">
+                <option value="">Selecciona tu bebida fría...</option>
+                <option value="Café Helado">Café Helado</option>
+                <option value="Té Helado">Té Helado</option>
+                <option value="Frapuccino">Frapuccino</option>
+                <option value="Limonada">Limonada</option>
+                <option value="Jugo de Naranja">Jugo de Naranja</option>
             </select>
 
             <h3>Alimentos</h3>
-            <select name="alimentos">
-                <option>Sandwich</option>
-                <option>Pan dulce</option>
-                <option>Ensalada</option>
-                <option>Hotcake</option>
-                <option>Mollete</option>
+            <select name="alimentos" id="alimentos">
+                <option value="">Selecciona tu alimento...</option>
+                <option value="Sandwich">Sandwich</option>
+                <option value="Pan dulce">Pan dulce</option>
+                <option value="Ensalada">Ensalada</option>
+                <option value="Hotcake">Hotcake</option>
+                <option value="Mollete">Mollete</option>
             </select>
 
             <h3>Comentarios</h3>
@@ -51,10 +55,27 @@
 
             <div class="btn-container">
                 <button class="accept" type="submit">Aceptar</button>
-                <button class="cancel">Cancelar</button>
+                <button class="cancel" type="button">Cancelar</button>
             </div>
         </form>
     </div>
+
+    <script>
+        document.getElementById('formulario').addEventListener('submit', function (event) {
+            let bebidaCaliente = document.getElementById('bebidas_calientes').value;
+            let bebidaFria = document.getElementById('bebidas_frias').value;
+            let alimento = document.getElementById('alimentos').value;
+
+            if (bebidaCaliente === "" && bebidaFria === "" && alimento === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: '¡Debes seleccionar al menos una bebida o alimento!',
+                });
+                event.preventDefault(); // Evita el envío del formulario
+            }
+        });
+    </script>
 </body>
 
 </html>
